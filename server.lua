@@ -135,11 +135,15 @@ function GetPlayerIdentifier(Player)
 end
 
 function GetSteamNameFromCitizenID(citizenid)
-    local data = MySQL.single.await(string.format("SELECT name FROM %s WHERE citizenid = ?", Config.Database.PlayersTable), {
-        citizenid
-    })
+    local field = Config.Framework == "qbcore" and "citizenid" or "identifier"
+
+    local query = string.format("SELECT name FROM %s WHERE %s = ?", Config.Database.PlayersTable, field)
+
+    local data = MySQL.single.await(query, { citizenid })
+
     return data and data.name or nil
 end
+
 
 function EnviarParaDiscordWebhook(resultadoFormatado)
     local embed = { {
