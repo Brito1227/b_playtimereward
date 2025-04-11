@@ -1,4 +1,4 @@
-local jogadoresConectados = {}
+local connectedPlayers = {}
 
 local QBCore, ESX
 
@@ -13,11 +13,11 @@ end)
 if Config.Framework == "qbcore" then
     RegisterNetEvent('QBCore:Server:OnPlayerLoaded', function(Player)
         local src = source
-        jogadoresConectados[src] = os.time()
+        connectedPlayers[src] = os.time()
     end)
 elseif Config.Framework == "esx" then
     RegisterNetEvent('esx:playerLoaded', function(playerId, xPlayer)
-        jogadoresConectados[playerId] = os.time()
+        connectedPlayers[playerId] = os.time()
     end)
 end
 
@@ -33,45 +33,45 @@ AddEventHandler('playerDropped', function(reason)
 
     if not Player then return end
 
-    local entrada = jogadoresConectados[src]
-    local saida = os.time()
+    local joinTime = connectedPlayers[src]
+    local leaveTime = os.time()
 
-    if entrada then
-        local segundos = saida - entrada
-        local horas = segundos / 3600
+    if joinTime then
+        local secondsPlayed = leaveTime - joinTime
+        local hoursPlayed = secondsPlayed / 3600
 
         MySQL.update([[ 
             INSERT INTO b_tempojogado (citizenid, horas_jogadas) 
             VALUES (?, ?) 
             ON DUPLICATE KEY UPDATE horas_jogadas = horas_jogadas + VALUES(horas_jogadas)
         ]], {
-            GetPlayerIdentifier(Player), horas
+            GetPlayerIdentifier(Player), hoursPlayed
         })
 
-        jogadoresConectados[src] = nil
+        connectedPlayers[src] = nil
     end
 end)
 
 lib.cron.new(Config.CronExpression, function()
-    RecompensarTopJogadores()
+    RewardTopPlayers()
 end)
 
-function RecompensarTopJogadores()
-    local resultado = MySQL.query.await([[  
+function RewardTopPlayers()
+    local result = MySQL.query.await([[  
         SELECT citizenid, horas_jogadas  
         FROM b_tempojogado  
         ORDER BY horas_jogadas DESC  
         LIMIT 3
     ]])
 
-    if not resultado or #resultado == 0 then return end
+    if not result or #result == 0 then return end
 
-    local mensagem = ""
+    local message = ""
 
-    for i, jogador in ipairs(resultado) do
-        local citizenid = jogador.citizenid
-        local horasDecimais = jogador.horas_jogadas
-        local coins = Config.Recompensas[i] or 5
+    for i, player in ipairs(result) do
+        local citizenid = player.citizenid
+        local decimalHours = player.horas_jogadas
+        local coins = Config.Rewards[i] or 5
 
         local Player
         if Config.Framework == "qbcore" then
@@ -97,23 +97,23 @@ function RecompensarTopJogadores()
             })
         end
 
-        local nome = GetSteamNameFromCitizenID(citizenid) or 'Unknown'
+        local name = GetSteamNameFromCitizenID(citizenid) or 'Unknown'
 
-        local totalSegundos = math.floor(horasDecimais * 3600)
-        local horas = math.floor(totalSegundos / 3600)
-        local minutos = math.floor((totalSegundos % 3600) / 60)
-        local segundos = totalSegundos % 60
-        local horasFormatadas = string.format("%dh%dm%ds", horas, minutos, segundos)
+        local totalSeconds = math.floor(decimalHours * 3600)
+        local h = math.floor(totalSeconds / 3600)
+        local m = math.floor((totalSeconds % 3600) / 60)
+        local s = totalSeconds % 60
+        local formattedTime = string.format("%dh%dm%ds", h, m, s)
 
-        mensagem = mensagem .. string.format(
+        message = message .. string.format(
             "%dº — %s [%s]\nHours: %s\nReward: **%d VIP Coins**\n\n",
-            i, nome, citizenid, horasFormatadas, coins
+            i, name, citizenid, formattedTime, coins
         )
     end
 
-    mensagem = mensagem .. Config.MensagemFinal
+    message = message .. Config.FinalMessage
 
-    EnviarParaDiscordWebhook(mensagem)
+    SendToDiscordWebhook(message)
 
     MySQL.update("DELETE FROM b_tempojogado")
 end
@@ -144,11 +144,10 @@ function GetSteamNameFromCitizenID(citizenid)
     return data and data.name or nil
 end
 
-
-function EnviarParaDiscordWebhook(resultadoFormatado)
+function SendToDiscordWebhook(formattedResult)
     local embed = { {
         ["title"] = "🏆 TOP 3 Weekly Players 🏆",
-        ["description"] = resultadoFormatado,
+        ["description"] = formattedResult,
         ["color"] = Config.EmbedColor,
         ["footer"] = {
             ["text"] = "Weekly Reward • " .. os.date("%x %X")
@@ -165,10 +164,10 @@ function EnviarParaDiscordWebhook(resultadoFormatado)
     }), { ['Content-Type'] = 'application/json' })
 end
 
-if Config.ComandoManualAtivo then
-    RegisterCommand(Config.NomeDoComandoManual, function(source)
+if Config.ManualCommandEnabled then
+    RegisterCommand(Config.ManualCommandName, function(source)
         if source ~= 0 then return end
-        RecompensarTopJogadores()
+        RewardTopPlayers()
         print('Weekly reward executed!')
     end)
 end

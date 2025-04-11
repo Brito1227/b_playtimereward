@@ -12,18 +12,18 @@ Config.Database = {
     PlayersTable = "players"
 }
 
--- Account type to give rewards (e.g., "coins", "bank", "money") support any currency
+-- Account type to give rewards (e.g., "coins", "bank", "money") — supports any currency
 Config.MoneyAccount = "bank"
 
 -- Rewards for top 3 players (1st, 2nd, 3rd)
-Config.Recompensas = {
+Config.Rewards = {
     50,
     25,
     15
 }
 
 -- Discord Webhook URL
-Config.Webhook = "https://discord.com/api/webhooks/SEU_WEBHOOK_AQUI"
+Config.Webhook = "https://discord.com/api/webhooks/YOUR_WEBHOOK_HERE"
 
 -- Bot name that sends the Discord message
 Config.BotName = "Assistente Panda"
@@ -32,10 +32,10 @@ Config.BotName = "Assistente Panda"
 Config.EmbedColor = 6501492
 
 -- Final message sent on Discord after top 3 listing
-Config.MensagemFinal = "The coins have been delivered automatically, thank you!"
+Config.FinalMessage = "The coins have been delivered automatically, thank you!"
 
 -- Allow manual command to trigger rewards (true or false)
-Config.ComandoManualAtivo = true
+Config.ManualCommandEnabled = true
 
 -- Name of the manual reward command (e.g. /recompensasmanual)
-Config.NomeDoComandoManual = "recompensasmanual"
+Config.ManualCommandName = "recompensasmanual"
