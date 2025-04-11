@@ -10,6 +10,8 @@ It includes full support for **QBCore** and **ESX**, and is optimized using **ox
 I originally built this system for my own roleplay server project, but I've decided to share it with the community.  
 It’s designed to be simple, customizable, and fully automated.
 
+It has not been tested on esx, if any fix is ​​needed please report it.
+
 ---
 
 ## 📦 Features
