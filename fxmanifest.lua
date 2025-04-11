@@ -1,5 +1,6 @@
 fx_version 'cerulean'
 game 'gta5'
+lua54 'yes'
 
 author 'Brito'
 description 'Weekly reward system for TOP 3 players with QBCore/ESX support'
@@ -9,8 +10,6 @@ dependencies {
     'oxmysql',
     'ox_lib'
 }
-
-lua54 'yes'
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
