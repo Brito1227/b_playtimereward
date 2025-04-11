@@ -12,8 +12,8 @@ Config.Database = {
     PlayersTable = "players"
 }
 
--- Account type to give rewards (e.g., "coins", "bank", "money")
-Config.MoneyAccount = "coins"
+-- Account type to give rewards (e.g., "coins", "bank", "money") support any currency
+Config.MoneyAccount = "bank"
 
 -- Rewards for top 3 players (1st, 2nd, 3rd)
 Config.Recompensas = {
