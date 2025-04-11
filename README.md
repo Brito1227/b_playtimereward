@@ -23,7 +23,7 @@ It has not been tested on esx, if any fix is ​​needed please report it.
 - 📆 Uses `ox_lib` cron system to trigger rewards every Tuesday (default)  
 - 📡 Sends a nicely formatted embed to a Discord webhook with the results  
 - ⚙️ Supports both **QBCore** and **ESX**  
-- 💻 Optional manual command to run the reward system (`/recompensasmanual`)  
+- 💻 Optional manual command to run the reward system (`/manualrewards`)  
 
 ---
 
@@ -83,7 +83,7 @@ The coins have been delivered automatically, thank you!
 You can manually trigger the reward system via server console (if enabled in the config):
 
 ```
-/recompensasmanual
+/manualrewards
 ```
 
 > Only works if executed from server console (source = 0)

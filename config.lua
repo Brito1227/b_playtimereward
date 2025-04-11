@@ -37,5 +37,5 @@ Config.FinalMessage = "The coins have been delivered automatically, thank you!"
 -- Allow manual command to trigger rewards (true or false)
 Config.ManualCommandEnabled = true
 
--- Name of the manual reward command (e.g. /recompensasmanual)
-Config.ManualCommandName = "recompensasmanual"
+-- Name of the manual reward command (e.g. /manualrewards)
+Config.ManualCommandName = "manualrewards"
