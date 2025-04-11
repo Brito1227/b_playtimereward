@@ -2,10 +2,9 @@ fx_version 'cerulean'
 game 'gta5'
 
 author 'Brito'
-description 'Sistema de recompensa semanal para TOP 3 jogadores com suporte QBCore/ESX'
+description 'Weekly reward system for TOP 3 players with QBCore/ESX support'
 version '1.0.0'
 
--- Dependências obrigatórias
 dependencies {
     'oxmysql',
     'ox_lib'
