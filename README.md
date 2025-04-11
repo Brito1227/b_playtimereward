@@ -39,7 +39,7 @@ It’s designed to be simple, customizable, and fully automated.
 2. Add it to your server resources.
 3. Add the resource to your `server.cfg`:
    ```
-   ensure nome-do-recurso
+   ensure b_playtimereward
    ```
 4. Make sure you have the required `b_tempojogado` table in your database:
    ```sql
