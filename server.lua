@@ -6,7 +6,7 @@ CreateThread(function()
     if Config.Framework == "qbcore" then
         QBCore = exports['qb-core']:GetCoreObject()
     elseif Config.Framework == "esx" then
-        TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+        ESX = exports['es_extended']:getSharedObject()
     end
 end)
 
